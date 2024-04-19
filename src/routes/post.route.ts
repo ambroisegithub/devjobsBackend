@@ -1,6 +1,6 @@
 import express from "express";
 import PostController from "../controllers/post.controller";
-
+import JobController from "../controllers/post.controller";
 const router = express.Router();
 
 router.post("/create", PostController.createBlogPost);
