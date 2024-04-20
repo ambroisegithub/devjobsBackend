@@ -1,14 +1,18 @@
 // job.routes.ts
 
 import express from "express";
-import JobController from "../controllers/jobController";
+import {
+  postJob,
+  getJob,
+  getJobs,
+  removeJob,
+} from "../controllers/jobController";
 
 const router = express.Router();
 
-router.post("/create", JobController.createJob);
-router.get("/getall", JobController.getAllJobs);
-router.get("/get/:id", JobController.getJobById);
-router.put("/update/:id", JobController.updateJobById);
-router.delete("/delete/:id", JobController.deleteJobById);
+router.post("/postJob", postJob);
+router.get("/jobs/:id", getJob);
+router.get("/jobs", getJobs);
+router.delete("/jobs/:id", removeJob);
 
 export default router;

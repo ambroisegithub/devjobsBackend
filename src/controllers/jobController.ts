@@ -1,124 +1,38 @@
-// job.controller.ts
+import { Request, Response } from 'express';
+import { createJob, findJobById, findAllJobs, deleteJob, JobDocument } from '../models/job';
 
-import { Request, Response } from "express";
-import { prisma } from "../server";
-const createJob = async (req: Request, res: Response) => {
-  try {
-    const {
-      company,
-      logo,
-      position,
-      contract,
-      location,
-      website,
-      isAvailable,
-      apply,
-      description,
-      requirements,
-      role,
-    } = req.body;
-    const newJob = await prisma.job.create({
-      data: {
-        company,
-        logo,
-        position,
-        contract,
-        location,
-        website,
-        isAvailable,
-        apply,
-        description,
-        requirements,
-        role,
-      },
-    });
-    res.status(200).json(newJob);
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
+export const postJob = async (req: Request, res: Response) => {
+  const job: JobDocument = req.body;
+
+  
+  const newJob = await createJob(job);
+  res.status(201).json(newJob);
 };
 
-const getAllJobs = async (req: Request, res: Response) => {
-  try {
-    const jobs = await prisma.job.findMany();
-    res.status(200).json(jobs);
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
-};
-
-const getJobById = async (req: Request, res: Response) => {
-  try {
+export const getJob = async (req: Request, res: Response) => {
     const { id } = req.params;
-    const job = await prisma.job.findUnique({
-      where: {
-        id: Number(id),
-      },
-    });
-    res.status(200).json(job);
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
+    const jobId = Number(id);
+  
+    if (isNaN(jobId)) {
+      res.status(400).json({ error: 'Invalid job ID' });
+      return;
+    }
+  
+    const job = await findJobById(jobId);
+    if (!job) {
+      res.status(404).json({ error: 'Job not found' });
+      return;
+    }
+  
+    res.json(job);
+  };
+export const getJobs = async (req: Request, res: Response) => {
+  const jobs = await findAllJobs();
+  res.json(jobs);
 };
 
-const updateJobById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const {
-      company,
-      logo,
-      position,
-      contract,
-      location,
-      website,
-      isAvailable,
-      apply,
-      description,
-      requirements,
-      role,
-    } = req.body;
-    const updatedJob = await prisma.job.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        company,
-        logo,
-        position,
-        contract,
-        location,
-        website,
-        isAvailable,
-        apply,
-        description,
-        requirements,
-        role,
-      },
-    });
-    res.status(200).json(updatedJob);
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
-};
-
-const deleteJobById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const deletedJob = await prisma.job.delete({
-      where: {
-        id: Number(id),
-      },
-    });
-    res.status(200).json(deletedJob);
-  } catch (e) {
-    res.status(500).json({ error: e });
-  }
-};
-
-export default {
-  createJob,
-  getAllJobs,
-  getJobById,
-  updateJobById,
-  deleteJobById,
+export const removeJob = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await deleteJob(Number(id));
+  res.json({ message: 'Job deleted successfully' });
 };

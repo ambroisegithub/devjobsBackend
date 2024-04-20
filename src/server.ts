@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import PostRouter from "./routes/post.route";
 import jobRoute from "./routes/job.route";
-
+import cors from "cors";
 export const prisma = new PrismaClient();
 
 const app = express();
@@ -10,6 +10,7 @@ const port = 8080;
 
 async function main() {
   app.use(express.json());
+ app.use(cors());
 
   // Register API routes
   app.use("/api/v1/post", PostRouter);
@@ -38,5 +39,3 @@ async function main() {
 }
 
 main();
-
-
