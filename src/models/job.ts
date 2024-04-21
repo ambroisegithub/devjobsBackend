@@ -1,4 +1,4 @@
-import { initializePrisma } from '../models/prisma';
+import { initializePrisma } from "../models/prisma";
 
 const prisma = initializePrisma();
 // Use prisma as you normally would
@@ -40,8 +40,8 @@ export const findJobById = async (id: number) => {
 export const findAllJobs = async () => {
   return await prisma.job.findMany({
     where: {
-      isAvailable: true
-    }
+      isAvailable: true,
+    },
   });
 };
 

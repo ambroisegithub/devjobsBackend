@@ -14,7 +14,7 @@ async function main() {
 
   // Register API routes
   app.use("/api/v1/post", PostRouter);
-  
+
   app.use("/api/v1/job", jobRoute);
 
   // Catch unregistered routes
