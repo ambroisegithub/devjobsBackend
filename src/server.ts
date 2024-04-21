@@ -10,7 +10,7 @@ const port = 8080;
 
 async function main() {
   app.use(express.json());
- app.use(cors());
+  app.use(cors());
 
   // Register API routes
   app.use("/api/v1/post", PostRouter);
