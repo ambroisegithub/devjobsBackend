@@ -23,6 +23,8 @@ export const UploadToCloud = async (
   } catch (error: any) {
     return res.status(400).json({
       message: error.message || "Error uploading to Cloudinary",
-    });
+    })
+
+  
   }
 };
